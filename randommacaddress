@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# ~/.scripts/alpha
+#
+# Run this script to give your wifi card a random mac address
+
+address=$(python /home/smith/.scripts/helper/randommacaddress.py)
+
+echo 'New address is: '$address
+
+echo 'What is the name of the interface you are trying to spoof?'
+read interface
+
+echo 'would you like a random mac address [y/n] '
+
+read answer
+
+if [ $answer == 'n' ]; then
+    echo 'Enter the new Mac Address: '
+    read address
+fi
+
+echo 'Okay, the interface ' $interface ' will be changed'
+
+ip link set dev $interface down
+ip link set dev $interface address $address
+ip link set dev $interface up
+
+echo 'You are good to go!'
+
+echo 'The new interface for ' $interface ' should be ' $address
